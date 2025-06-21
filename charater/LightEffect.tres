@@ -1,0 +1,87 @@
+[gd_resource type="SpriteFrames" load_steps=15 format=3 uid="uid://qwycwl38jps7"]
+
+[ext_resource type="Texture2D" uid="uid://casvaeu66qbo4" path="res://asset/Effect/攻击受击打击大招（16套）/0018/0.png" id="1_qdd14"]
+[ext_resource type="Texture2D" uid="uid://cb46q5kbewdc4" path="res://asset/Effect/攻击受击打击大招（16套）/0018/1.png" id="2_3bfy7"]
+[ext_resource type="Texture2D" uid="uid://d0pupcvfyw3hx" path="res://asset/Effect/攻击受击打击大招（16套）/0018/2.png" id="3_dhoap"]
+[ext_resource type="Texture2D" uid="uid://b53qhpunr3nnl" path="res://asset/Effect/攻击受击打击大招（16套）/0018/3.png" id="4_y3x4p"]
+[ext_resource type="Texture2D" uid="uid://qih0uxe4t1ju" path="res://asset/Effect/攻击受击打击大招（16套）/0018/4.png" id="5_r2nff"]
+[ext_resource type="Texture2D" uid="uid://cgkjdcw5y1ur3" path="res://asset/Effect/fx.png" id="6_yu1i2"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4u46l"]
+atlas = ExtResource("6_yu1i2")
+region = Rect2(0, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wip05"]
+atlas = ExtResource("6_yu1i2")
+region = Rect2(0, 256, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5p5lj"]
+atlas = ExtResource("6_yu1i2")
+region = Rect2(0, 512, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n3mc6"]
+atlas = ExtResource("6_yu1i2")
+region = Rect2(0, 768, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nywfd"]
+atlas = ExtResource("6_yu1i2")
+region = Rect2(0, 1024, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_irv6t"]
+atlas = ExtResource("6_yu1i2")
+region = Rect2(0, 1280, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wlkgu"]
+atlas = ExtResource("6_yu1i2")
+region = Rect2(0, 1536, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p3ltp"]
+atlas = ExtResource("6_yu1i2")
+region = Rect2(0, 1792, 256, 256)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_qdd14")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_3bfy7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_dhoap")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_y3x4p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_r2nff")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4u46l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wip05")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5p5lj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n3mc6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nywfd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_irv6t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wlkgu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p3ltp")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 18.0
+}]

@@ -1,0 +1,159 @@
+[gd_scene load_steps=27 format=3 uid="uid://dxvldl73uw02a"]
+
+[ext_resource type="Script" uid="uid://cgpmcjgic6wbb" path="res://Map/Map.cs" id="1_exof5"]
+[ext_resource type="Texture2D" uid="uid://dumj1lsd56obi" path="res://asset/Map/pandemos_empire_krita.jpg" id="1_we4l4"]
+[ext_resource type="Texture2D" uid="uid://bwpjh5nj0nv34" path="res://asset/UI/button/buttondown.png" id="3_wefki"]
+[ext_resource type="Texture2D" uid="uid://duentyrj6mdq0" path="res://asset/UI/button/sitebutton.png" id="4_hhtu4"]
+[ext_resource type="PackedScene" uid="uid://dmqc0oaqsktsg" path="res://Map/SiteButton.tscn" id="5_soa74"]
+[ext_resource type="Texture2D" uid="uid://bibfa5ocaklns" path="res://asset/UI/button/SButton.png" id="6_2xeiv"]
+[ext_resource type="Script" uid="uid://yoj0g2qr2i3l" path="res://Map/ReadyButton.cs" id="7_1svsv"]
+[ext_resource type="Shader" uid="uid://d0bejj7eeteds" path="res://shader/geometric.gdshader" id="8_wihts"]
+[ext_resource type="Shader" uid="uid://bf5tkhn7i13me" path="res://shader/UI1.gdshader" id="9_jv280"]
+[ext_resource type="Theme" uid="uid://c2vpeachxq8yw" path="res://battle/UIScene/LabelTheme1.tres" id="10_svc60"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vkbln"]
+shader = ExtResource("8_wihts")
+shader_parameter/intense = 1.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wmtri"]
+texture = ExtResource("3_wefki")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lyug0"]
+texture = ExtResource("4_hhtu4")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_w0eow"]
+texture = ExtResource("4_hhtu4")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_noyql"]
+texture = ExtResource("3_wefki")
+
+[sub_resource type="Theme" id="Theme_sc378"]
+Button/styles/disabled = null
+Button/styles/focus = SubResource("StyleBoxTexture_wmtri")
+Button/styles/hover = SubResource("StyleBoxTexture_lyug0")
+Button/styles/normal = SubResource("StyleBoxTexture_w0eow")
+Button/styles/pressed = SubResource("StyleBoxTexture_noyql")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mb101"]
+shader = ExtResource("9_jv280")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h0fhp"]
+resource_local_to_scene = true
+shader = ExtResource("9_jv280")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_b38e6"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fl2tk"]
+texture = ExtResource("6_2xeiv")
+modulate_color = Color(3, 7, 10, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hgu68"]
+texture = ExtResource("6_2xeiv")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7mxfi"]
+texture = ExtResource("6_2xeiv")
+modulate_color = Color(0.74, 0.74, 0.74, 1)
+
+[sub_resource type="Theme" id="Theme_6uk3n"]
+Button/styles/focus = SubResource("StyleBoxTexture_b38e6")
+Button/styles/hover = SubResource("StyleBoxTexture_fl2tk")
+Button/styles/normal = SubResource("StyleBoxTexture_hgu68")
+Button/styles/pressed = SubResource("StyleBoxTexture_7mxfi")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_b32u3"]
+frequency = 0.0032
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_7xl14"]
+noise = SubResource("FastNoiseLite_b32u3")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wbmu0"]
+shader = ExtResource("9_jv280")
+shader_parameter/noise = SubResource("NoiseTexture2D_7xl14")
+
+[node name="Map" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_exof5")
+
+[node name="GameMap" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_vkbln")
+layout_mode = 0
+offset_right = 1956.0
+offset_bottom = 1095.0
+texture = ExtResource("1_we4l4")
+metadata/_edit_lock_ = true
+
+[node name="Camera" type="Camera2D" parent="."]
+position = Vector2(1372, 907)
+limit_left = 0
+limit_top = 0
+limit_right = 3235
+limit_bottom = 1970
+position_smoothing_enabled = true
+position_smoothing_speed = 3.0
+
+[node name="DragButton" type="Button" parent="."]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_right = 3235.0
+offset_bottom = 1970.0
+metadata/_edit_lock_ = true
+
+[node name="SiteManagement" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme = SubResource("Theme_sc378")
+
+[node name="Button" parent="SiteManagement" instance=ExtResource("5_soa74")]
+material = SubResource("ShaderMaterial_mb101")
+layout_mode = 0
+offset_left = 1474.0
+offset_top = 1285.0
+offset_right = 1544.0
+offset_bottom = 1355.0
+
+[node name="UI" type="CanvasLayer" parent="."]
+layer = 2
+
+[node name="ReadyButton" type="Button" parent="UI"]
+z_index = 4
+material = SubResource("ShaderMaterial_h0fhp")
+offset_left = 1790.0
+offset_top = 944.0
+offset_right = 1921.0
+offset_bottom = 1075.0
+focus_mode = 0
+theme = SubResource("Theme_6uk3n")
+script = ExtResource("7_1svsv")
+
+[node name="Label" type="Label" parent="UI/ReadyButton"]
+layout_mode = 0
+offset_left = 33.0
+offset_top = 43.0
+offset_right = 103.0
+offset_bottom = 92.0
+theme = ExtResource("10_svc60")
+text = "战术"
+
+[node name="ColorRect" type="ColorRect" parent="UI"]
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 2
+color = Color(1, 1, 1, 0)
+metadata/_edit_lock_ = true
+
+[node name="BattleReadyLayer" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_wbmu0")
+layout_mode = 0
+offset_left = -972.0
+offset_top = -553.0
+offset_right = 28.0
+offset_bottom = 447.0

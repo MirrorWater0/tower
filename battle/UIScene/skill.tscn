@@ -1,0 +1,114 @@
+[gd_scene load_steps=7 format=3 uid="uid://bvnftwrftpkc7"]
+
+[ext_resource type="Script" uid="uid://bhf4wionnrjlp" path="res://battle/UIScene/SkillButton.cs" id="1_as26r"]
+[ext_resource type="Theme" uid="uid://bltfa7a6iswv" path="res://battle/ButtonTheme1.tres" id="1_cqfn4"]
+[ext_resource type="Theme" uid="uid://c2vpeachxq8yw" path="res://battle/UIScene/LabelTheme1.tres" id="2_ylu55"]
+
+[sub_resource type="Shader" id="Shader_cbm5v"]
+code = "shader_type canvas_item;
+#define iTime TIME
+#define NUM_OCTAVES 5
+#define iResolution (1./SCREEN_PIXEL_SIZE)
+#define fragCoord ((UV * iResolution).xy)
+#define fragColor COLOR
+
+uniform bool isADDtex = false;
+uniform bool addtexcolor = false;
+uniform vec4 light :source_color = vec4(0);
+uniform float size = 1.;
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	vec4 orcolor = fragColor;
+	vec4 tex = texture(TEXTURE,UV);
+float t = iTime + 19.0;
+    vec2 uv = (1. - (3.0 * fragCoord - iResolution.xy) / iResolution.y)*size;
+
+    vec3 ro = vec3(0.0, 0.0, -6.0);        // Ray origin (camera)
+    vec3 rd = normalize(vec3(uv, 1.5));    // Ray direction
+
+    float d = 0.0;  // Distance accumulator
+    float i = 0.0;  // Iteration index
+    vec3 col = vec3(0.0);
+
+    // Raymarch loop — simulate volumetric smoke field
+    for (int j = 0; j < 64; ++j) {
+        vec3 p = ro + d * rd;
+        vec3 q = p;
+
+        // Turbulence - recursive offset
+        for (float k = 1.0; k < 5.0; k += 1.0) {
+            q += cos(q.yzx * k + vec3(t * 0.2, t * 0.3, t * 0.1)) / k;
+        }
+
+        float density = 0.2 / length(q.xy) * 0.5;  // Radial density falloff
+        density *= exp(-0.2 * p.z);                // Depth fade
+        col += vec3(0.7, 0.8, 1.0) * density * 0.03;
+
+        d += 0.05 + 0.01 * sin(t + float(j));       // Dynamic step size
+    }
+
+    // Tonemap & finish
+    col = tanh(col * 1.5);                          // Gentle tone mapping
+    fragColor =light + vec4(col, 1.0)/1.5;
+
+	if(isADDtex){
+		fragColor.a = tex.a;
+	}
+	if(addtexcolor){
+		fragColor = orcolor*fragColor;
+	}
+	COLOR.a =COLOR.a *clamp(1.5*(1.- UV.x),0.,1.);
+}
+
+//void light() {
+	// Called for every pixel for every light affecting the CanvasItem.
+	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fla6k"]
+shader = SubResource("Shader_cbm5v")
+shader_parameter/isADDtex = true
+shader_parameter/addtexcolor = true
+shader_parameter/light = Color(0.43, 0.43, 0.43, 0)
+shader_parameter/size = 0.3
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tgstj"]
+size = Vector2(89.5, 18.5)
+
+[node name="skill1" type="Button"]
+material = SubResource("ShaderMaterial_fla6k")
+custom_minimum_size = Vector2(100, 25)
+offset_right = 100.0
+offset_bottom = 25.0
+focus_mode = 0
+theme = ExtResource("1_cqfn4")
+theme_override_colors/font_outline_color = Color(1, 0, 0, 1)
+theme_override_constants/outline_size = 0
+keep_pressed_outside = true
+script = ExtResource("1_as26r")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 5.0
+offset_top = -2.0
+offset_right = 57.0
+offset_bottom = 53.0
+scale = Vector2(0.45, 0.45)
+theme = ExtResource("2_ylu55")
+theme_override_colors/font_color = Color(0.898039, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.317647, 0.329412, 0.341176, 0.454902)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 40
+text = "11"
+
+[node name="Detector" type="Area2D" parent="."]
+visible = false
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Detector"]
+position = Vector2(49.5, 12.75)
+shape = SubResource("RectangleShape2D_tgstj")

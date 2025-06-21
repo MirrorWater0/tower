@@ -1,0 +1,155 @@
+[gd_scene load_steps=13 format=3 uid="uid://d2k684qebwu0s"]
+
+[ext_resource type="Script" uid="uid://cmin73gpxvuar" path="res://battle/UIScene/BattleReady/BattleReady.cs" id="1_53jkx"]
+[ext_resource type="Shader" uid="uid://dooc06jwt4ft2" path="res://shader/Crystal.gdshader" id="1_jyqaa"]
+[ext_resource type="Texture2D" uid="uid://bihcv0ce7nvyj" path="res://asset/2.jpg" id="2_3blau"]
+[ext_resource type="Texture2D" uid="uid://deraktmr5w000" path="res://asset/UI/轨迹素材_093.png" id="3_0x5cs"]
+[ext_resource type="Shader" uid="uid://cbu3v2iauiawe" path="res://shader/BG1.gdshader" id="3_ppimv"]
+[ext_resource type="PackedScene" uid="uid://de0vuounbh3nm" path="res://battle/UIScene/frame.tscn" id="3_x8w3b"]
+[ext_resource type="Shader" uid="uid://d0bejj7eeteds" path="res://shader/geometric.gdshader" id="4_ekwrc"]
+[ext_resource type="Texture2D" uid="uid://bf85s0c4metx3" path="res://asset/UI/UI1.png" id="5_wwb3n"]
+[ext_resource type="Theme" uid="uid://bltfa7a6iswv" path="res://battle/ButtonTheme1.tres" id="6_ebho2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ejwt2"]
+shader = ExtResource("1_jyqaa")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_um1i1"]
+shader = ExtResource("3_ppimv")
+shader_parameter/isADDtex = false
+shader_parameter/light = Vector4(0, 0, 0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kjvqh"]
+shader = ExtResource("4_ekwrc")
+shader_parameter/intense = 100.0
+
+[node name="BattleReady" type="Control"]
+material = SubResource("ShaderMaterial_ejwt2")
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_53jkx")
+
+[node name="bg" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_um1i1")
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 2
+texture = ExtResource("2_3blau")
+expand_mode = 1
+metadata/_edit_lock_ = true
+
+[node name="TextureRect" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_kjvqh")
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+texture = ExtResource("3_0x5cs")
+expand_mode = 1
+metadata/_edit_lock_ = true
+
+[node name="frame" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 161.0
+offset_top = 700.0
+offset_right = 1779.0
+offset_bottom = 917.0
+scale = Vector2(0.9, 0.9)
+mouse_filter = 2
+theme_override_constants/separation = 250
+metadata/_edit_lock_ = true
+
+[node name="frame1" parent="frame" instance=ExtResource("3_x8w3b")]
+layout_mode = 2
+expand_mode = 1
+
+[node name="frame2" parent="frame" instance=ExtResource("3_x8w3b")]
+layout_mode = 2
+expand_mode = 1
+
+[node name="frame3" parent="frame" instance=ExtResource("3_x8w3b")]
+layout_mode = 2
+expand_mode = 1
+
+[node name="frame4" parent="frame" instance=ExtResource("3_x8w3b")]
+layout_mode = 2
+expand_mode = 1
+
+[node name="GridContainer" type="GridContainer" parent="."]
+z_index = 2
+layout_mode = 0
+offset_left = 187.0
+offset_top = 107.0
+offset_right = 477.0
+offset_bottom = 397.0
+scale = Vector2(1.7, 1.7)
+columns = 3
+
+[node name="7" type="TextureRect" parent="GridContainer"]
+layout_mode = 2
+texture = ExtResource("5_wwb3n")
+
+[node name="4" type="TextureRect" parent="GridContainer"]
+layout_mode = 2
+texture = ExtResource("5_wwb3n")
+
+[node name="1" type="TextureRect" parent="GridContainer"]
+layout_mode = 2
+texture = ExtResource("5_wwb3n")
+
+[node name="8" type="TextureRect" parent="GridContainer"]
+layout_mode = 2
+texture = ExtResource("5_wwb3n")
+
+[node name="5" type="TextureRect" parent="GridContainer"]
+layout_mode = 2
+texture = ExtResource("5_wwb3n")
+
+[node name="2" type="TextureRect" parent="GridContainer"]
+layout_mode = 2
+texture = ExtResource("5_wwb3n")
+
+[node name="9" type="TextureRect" parent="GridContainer"]
+layout_mode = 2
+texture = ExtResource("5_wwb3n")
+
+[node name="6" type="TextureRect" parent="GridContainer"]
+layout_mode = 2
+texture = ExtResource("5_wwb3n")
+
+[node name="3" type="TextureRect" parent="GridContainer"]
+layout_mode = 2
+texture = ExtResource("5_wwb3n")
+
+[node name="Button" type="Button" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 869.0
+offset_top = 952.0
+offset_right = 1019.0
+offset_bottom = 1029.0
+theme_override_font_sizes/font_size = 50
+text = "battle"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 746.0
+offset_top = 100.0
+offset_right = 1039.0
+offset_bottom = 400.0
+scale = Vector2(1.8, 1.8)
+theme = ExtResource("6_ebho2")
+theme_override_constants/separation = 100
+
+[node name="Untake1" type="TextureRect" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="Untake2" type="TextureRect" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="Untake3" type="TextureRect" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="Untake4" type="TextureRect" parent="HBoxContainer"]
+layout_mode = 2
+
+[connection signal="pressed" from="Button" to="." method="ComfirmTactics"]

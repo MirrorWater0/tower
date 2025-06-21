@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://bfc4xx36frun"]
+
+[ext_resource type="Texture2D" uid="uid://bxk1ajyda06jr" path="res://asset/PlayerCharater/KasiyaPortrait.png" id="1_rlb3d"]
+[ext_resource type="Script" uid="uid://yx6xdsnoim5e" path="res://battle/UIScene/BattleReady/PortaitFrame.cs" id="1_ufud0"]
+
+[node name="PortaitFrame" type="Node2D"]
+z_index = -1
+position = Vector2(1.76471, 1.76471)
+script = ExtResource("1_ufud0")
+
+[node name="Button" type="Button" parent="."]
+self_modulate = Color(1, 1, 1, 0.211)
+z_index = -2
+offset_left = 1.76471
+offset_top = 2.765
+offset_right = 89.7647
+offset_bottom = 90.765
+keep_pressed_outside = true
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_left = 1.76471
+offset_top = 2.765
+offset_right = 89.7647
+offset_bottom = 90.765
+mouse_filter = 2
+texture = ExtResource("1_rlb3d")
+expand_mode = 1

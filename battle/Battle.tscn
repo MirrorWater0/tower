@@ -1,0 +1,384 @@
+[gd_scene load_steps=21 format=3 uid="uid://cnapr4f8u0e1k"]
+
+[ext_resource type="Script" uid="uid://frdei83p7q80" path="res://battle/Battle.cs" id="1_n3ui2"]
+[ext_resource type="FontFile" uid="uid://bklanx6cdoraw" path="res://asset/font/CormorantSC-Bold.ttf" id="2_f4e3u"]
+[ext_resource type="Script" uid="uid://bqhly2pb8u0fx" path="res://battle/CharaterControl.cs" id="3_3vtlu"]
+[ext_resource type="Theme" uid="uid://bltfa7a6iswv" path="res://battle/ButtonTheme1.tres" id="4_eoytn"]
+[ext_resource type="Texture2D" uid="uid://dfgi24opauw8h" path="res://asset/0.jpg" id="4_r4boa"]
+[ext_resource type="PackedScene" uid="uid://de0vuounbh3nm" path="res://battle/UIScene/frame.tscn" id="6_n0cwx"]
+[ext_resource type="Shader" uid="uid://bf5tkhn7i13me" path="res://shader/UI1.gdshader" id="7_r8nfv"]
+[ext_resource type="Theme" uid="uid://c2vpeachxq8yw" path="res://battle/UIScene/LabelTheme1.tres" id="7_wuq8c"]
+
+[sub_resource type="Shader" id="Shader_vj222"]
+code = "shader_type canvas_item;
+//modified from @XorDev
+#define iTime TIME
+#define NUM_OCTAVES 20
+#define iResolution (1./SCREEN_PIXEL_SIZE)
+#define fragCoord ((UV * iResolution).xy)
+#define fragColor COLOR
+#define SCREEN_UV vec2(UV.x, 1.0 - UV.y)
+
+#define iterations 17
+#define formuparam 0.53
+
+#define volsteps 6
+#define stepsize 0.1
+
+#define zoom   1.800
+#define tile   0.850
+#define speed  0.010 
+
+#define brightness 0.0015
+#define darkmatter 0.300
+#define distfading 0.730
+#define saturation 0.850
+uniform vec4 moduate :source_color= vec4(1);
+
+void fragment()
+{
+	//get coords and direction
+	vec2 uv= UV;
+	uv.y*=iResolution.y/iResolution.x;
+	vec3 dir=vec3(uv*zoom,1.);
+	float time=iTime*speed+.25;
+
+	//mouse rotation
+	float a1=.5;
+	float a2=.8;
+	mat2 rot1=mat2(vec2(cos(a1),sin(a1)),vec2(-sin(a1),cos(a1)));
+	mat2 rot2=mat2(vec2(cos(a2),sin(a2)),vec2(-sin(a2),cos(a2)));
+	dir.xz*=rot1;
+	dir.xy*=rot2;
+	vec3 from=vec3(1.,.5,0.5);
+	from+=vec3(time*2.,time,-2.);
+	from.xz*=rot1;
+	from.xy*=rot2;
+	
+	//volumetric rendering
+	float s=0.1,fade=1.;
+	vec3 v=vec3(0.);
+	for (int r=0; r<volsteps; r++) {
+		vec3 p=from+s*dir*.5;
+		p = abs(vec3(tile)-mod(p,vec3(tile*2.))); // tiling fold
+		float pa,a=pa=0.;
+		for (int i=0; i<iterations; i++) { 
+			p=abs(p)/dot(p,p)-formuparam; // the magic formula
+			a+=abs(length(p)-pa); // absolute sum of average change
+			pa=length(p);
+		}
+		float dm=max(0.,darkmatter-a*a*.001); //dark matter
+		a*=a*a; // add contrast
+		if (r>6) fade*=1.-dm; // dark matter, don't render near
+		//v+=vec3(dm,dm*.5,0.);
+		v+=fade;
+		v+=vec3(s,s*s,s*s*s*s)*a*brightness*fade; // coloring based on distance
+		fade*=distfading; // distance fading
+		s+=stepsize;
+	}
+	v=mix(vec3(length(v)),v,saturation); //color adjust
+	fragColor = vec4(v*.01,1.)*moduate;	
+	
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ts8fe"]
+shader = SubResource("Shader_vj222")
+shader_parameter/moduate = Color(0.67451, 1, 1, 1)
+
+[sub_resource type="Animation" id="Animation_0jh7n"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("start:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ColorRect:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Camera2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(960, 540)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ColorRect2:color")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("bg:self_modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_r8nfv"]
+resource_name = "end"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect2:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.7),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_xpomc"]
+resource_name = "hit"
+length = 0.8
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.333333, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Camera2D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.133333, 0.266667, 0.466667, 0.766667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(960, 540), Vector2(975, 550), Vector2(980, 535), Vector2(970, 550), Vector2(960, 540)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("bg:self_modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.333333, 0.466667),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(0.4, 0.4, 0.4, 1), Color(0.4, 0.4, 0.4, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_8cf7v"]
+resource_name = "start"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("start:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.333333, 0.6, 0.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ColorRect2:color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.233333, 0.833333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_od72c"]
+_data = {
+&"RESET": SubResource("Animation_0jh7n"),
+&"end": SubResource("Animation_r8nfv"),
+&"hit": SubResource("Animation_xpomc"),
+&"start": SubResource("Animation_8cf7v")
+}
+
+[sub_resource type="Gradient" id="Gradient_c6e3k"]
+offsets = PackedFloat32Array(0.88961, 1)
+colors = PackedColorArray(1, 1, 1, 0, 0.921569, 0, 0, 0.333333)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_5fvgj"]
+gradient = SubResource("Gradient_c6e3k")
+fill = 2
+fill_from = Vector2(0.490826, 0.5)
+fill_to = Vector2(0, 0.00458716)
+
+[sub_resource type="Shader" id="Shader_1euq2"]
+code = "shader_type canvas_item;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	vec2 uv =UV;
+	COLOR.a = UV.x;
+}
+
+//void light() {
+	// Called for every pixel for every light affecting the CanvasItem.
+	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uifq5"]
+shader = SubResource("Shader_1euq2")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jhxqk"]
+resource_local_to_scene = true
+shader = ExtResource("7_r8nfv")
+
+[node name="Battle" type="Node2D"]
+script = ExtResource("1_n3ui2")
+
+[node name="bg" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_ts8fe")
+offset_left = -257.0
+offset_top = -225.0
+offset_right = 2303.0
+offset_bottom = 1215.0
+texture = ExtResource("4_r4boa")
+metadata/_edit_lock_ = true
+
+[node name="Right" type="Node2D" parent="."]
+y_sort_enabled = true
+position = Vector2(1180, 310)
+
+[node name="Left" type="Node2D" parent="."]
+y_sort_enabled = true
+position = Vector2(740, 310)
+
+[node name="BattlePlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_od72c")
+}
+autoplay = "start"
+
+[node name="start" type="Label" parent="."]
+offset_left = 609.0
+offset_top = 478.0
+offset_right = 1301.0
+offset_bottom = 600.0
+theme_override_colors/font_color = Color(0.647059, 0.756863, 0.862745, 1)
+theme_override_colors/font_outline_color = Color(0.267, 0.267, 0.267, 0.854)
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("2_f4e3u")
+theme_override_font_sizes/font_size = 100
+text = "BATTLE START"
+metadata/_edit_lock_ = true
+
+[node name="ColorRect" type="NinePatchRect" parent="."]
+self_modulate = Color(1, 1, 1, 0)
+offset_right = 1920.0
+offset_bottom = 1080.0
+texture = SubResource("GradientTexture2D_5fvgj")
+metadata/_edit_lock_ = true
+
+[node name="CharaterControl" type="Control" parent="."]
+modulate = Color(0.92, 0.92, 0.92, 1)
+material = SubResource("ShaderMaterial_uifq5")
+layout_mode = 3
+anchors_preset = 0
+offset_left = 60.0
+offset_top = 810.0
+offset_right = 160.0
+offset_bottom = 910.0
+theme = ExtResource("4_eoytn")
+script = ExtResource("3_3vtlu")
+metadata/_edit_lock_ = true
+
+[node name="frame1" parent="CharaterControl" instance=ExtResource("6_n0cwx")]
+layout_mode = 0
+
+[node name="frame2" parent="CharaterControl" instance=ExtResource("6_n0cwx")]
+layout_mode = 0
+offset_left = 450.0
+offset_right = 667.0
+
+[node name="frame3" parent="CharaterControl" instance=ExtResource("6_n0cwx")]
+layout_mode = 0
+offset_left = 900.0
+offset_right = 1117.0
+
+[node name="frame4" parent="CharaterControl" instance=ExtResource("6_n0cwx")]
+layout_mode = 0
+offset_left = 1350.0
+offset_right = 1567.0
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(960, 540)
+position_smoothing_enabled = true
+metadata/_edit_lock_ = true
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+z_index = 5
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
+metadata/_edit_lock_ = true
+
+[node name="Retreat" type="Button" parent="."]
+material = SubResource("ShaderMaterial_jhxqk")
+offset_left = 1795.0
+offset_top = 692.0
+offset_right = 1894.0
+offset_bottom = 788.0
+theme = ExtResource("4_eoytn")
+text = "撤退
+"
+
+[node name="Label" type="Label" parent="Retreat"]
+layout_mode = 0
+offset_left = 17.0
+offset_top = 23.0
+offset_right = 92.0
+offset_bottom = 72.0
+theme = ExtResource("7_wuq8c")
+text = "撤退"

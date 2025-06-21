@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://dmqc0oaqsktsg"]
+
+[ext_resource type="Script" uid="uid://cui3xil6fvrba" path="res://Map/SiteButton.cs" id="1_wilnw"]
+
+[node name="Button" type="Button"]
+offset_left = 1472.0
+offset_top = 1064.0
+offset_right = 1672.0
+offset_bottom = 1264.0
+toggle_mode = true
+script = ExtResource("1_wilnw")
